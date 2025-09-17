@@ -1,0 +1,115 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+/// --- ユーザー関連 ---
+model User {
+  id          Int     @id @default(autoincrement())
+  username    String  @unique
+  icon_url    String?
+  // コミュニティへの貢献度（カルマスコア）
+  karma_score Int     @default(0)
+
+  posts         Post[]
+  comments      Comment[]
+  post_likes    PostLike[]
+  post_votes    PostVote[]
+  comment_likes CommentLike[]
+  comment_votes CommentVote[]
+}
+
+/// --- 投稿関連 ---
+model Post {
+  id         Int        @id @default(autoincrement())
+  user_id    Int
+  title      String     @unique
+  content    String
+  created_at DateTime   @default(now())
+  user       User       @relation(fields: [user_id], references: [id])
+  likes      PostLike[]
+  votes      PostVote[]
+  comments   Comment[]
+}
+
+/// --- コメント関連 ---
+model Comment {
+  id         Int      @id @default(autoincrement())
+  post_id    Int
+  user_id    Int
+  content    String
+  created_at DateTime @default(now())
+
+  post  Post          @relation(fields: [post_id], references: [id])
+  user  User          @relation(fields: [user_id], references: [id])
+  likes CommentLike[]
+  votes CommentVote[]
+}
+
+/// --- 投稿へのリアクション ---
+model PostLike {
+  id         Int      @id @default(autoincrement())
+  post_id    Int
+  user_id    Int
+  created_at DateTime @default(now())
+
+  post Post @relation(fields: [post_id], references: [id])
+  user User @relation(fields: [user_id], references: [id])
+
+  @@unique([post_id, user_id]) // ユーザーは1つの投稿に1回しかいいねできない
+}
+
+model PostVote {
+  id         Int      @id @default(autoincrement())
+  post_id    Int
+  user_id    Int
+  vote_type  VoteType
+  created_at DateTime @default(now())
+
+  post Post @relation(fields: [post_id], references: [id])
+  user User @relation(fields: [user_id], references: [id])
+
+  @@unique([post_id, user_id]) // ユーザーは1つの投稿に1回しか投票できない
+}
+
+/// --- コメントへのリアクション ---
+model CommentLike {
+  id         Int      @id @default(autoincrement())
+  comment_id Int
+  user_id    Int
+  created_at DateTime @default(now())
+
+  comment Comment @relation(fields: [comment_id], references: [id])
+  user    User    @relation(fields: [user_id], references: [id])
+
+  @@unique([comment_id, user_id]) // ユーザーは1つのコメントに1回しかいいねできない
+}
+
+model CommentVote {
+  id         Int      @id @default(autoincrement())
+  comment_id Int
+  user_id    Int
+  vote_type  VoteType
+  created_at DateTime @default(now())
+  comment    Comment  @relation(fields: [comment_id], references: [id])
+  user       User     @relation(fields: [user_id], references: [id])
+
+  @@unique([comment_id, user_id]) // ユーザーは1つのコメントに1回しか投票できない
+}
+
+/// --- 投票の種類を定義する列挙型 ---
+enum VoteType {
+  GOOD
+  BAD
+}
