@@ -1,5 +1,5 @@
 import Post from "./Post"; // 新しく作成した Post コンポーネントをインポート
-import { Post as PostType } from "@/lib/post";
+import { Post as PostType } from "@/lib/dao/post";
 
 export default function PostList({ posts }: { posts: PostType[] }) {
   return (

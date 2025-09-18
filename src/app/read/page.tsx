@@ -1,4 +1,4 @@
-import { getPosts } from "@/lib/post";
+import { getPosts } from "@/lib/dao/post";
 
 export default async function page() {
   const posts = await getPosts();

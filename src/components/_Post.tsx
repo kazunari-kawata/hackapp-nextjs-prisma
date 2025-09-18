@@ -1,4 +1,4 @@
-import { Post as PostType } from "@/lib/post"; // 投稿データの型
+import { Post as PostType } from "@/lib/dao/post"; // 投稿データの型
 import UserHeader from "./UserHeader"; // UserHeaderコンポーネントをインポート
 
 // 仮のユーザー情報（実際にはPostTypeに含めるか、別途取得します）

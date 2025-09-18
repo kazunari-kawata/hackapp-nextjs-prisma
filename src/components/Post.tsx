@@ -1,11 +1,11 @@
-import { Post as PostType } from "@/lib/post";
+import { Post as PostType } from "@/lib/dao/post";
 import Reaction from "./Reaction";
 import UserHeader from "./UserHeader";
 
 export default function Post({ post }: { post: PostType }) {
   return (
     <>
-    {/* ユーザーデータが反映されるように */}
+      {/* ユーザーデータが反映されるように */}
       {/* <div>
         <UserHeader username={post.userName} avatarUrl={post.userAvatarUrl} />
       </div> */}

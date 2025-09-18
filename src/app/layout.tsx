@@ -16,10 +16,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ja" suppressHydrationWarning>
+    <html lang="ja">
       <body className={inter.className}>
-        <Header />
-        {children}
+        <div className="md:grid md:grid-cols-[1fr_2fr_1fr] md:gap-5 md:min-h-screen">
+          {/* 左カラム */}
+          <div>
+            <Header />
+          </div>
+          {/* 中央カラム */}
+          <main>{children}</main>
+          {/* 右カラム */}
+          <div></div>
+        </div>
       </body>
     </html>
   );

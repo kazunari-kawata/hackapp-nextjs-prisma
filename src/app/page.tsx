@@ -1,6 +1,6 @@
-import ContactForm from "@/components/ContactForm";
+import ContactForm from "@/components/PostForm";
 import PostList from "@/components/PostList";
-import { getPosts } from "@/lib/post";
+import { getPosts } from "@/lib/dao/post";
 
 export default async function Home() {
   const posts = await getPosts();

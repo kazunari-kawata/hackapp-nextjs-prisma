@@ -1,5 +1,5 @@
 "use client";
-import { submitContactForm } from "@/lib/actions/contact";
+import { submitContactForm } from "@/lib/actions/post";
 import { PostSchema } from "@/validations/contact";
 import { useActionState, useState } from "react";
 import { z } from "zod";
@@ -27,7 +27,7 @@ export default function ContactForm() {
       }));
     } catch (error) {
       if (error instanceof z.ZodError) {
-        const errorMessage = error.errors[0]?.message || "";
+        const errorMessage = error.issues[0]?.message || "";
         setClientErrors((prev) => ({
           ...prev,
           [title]: errorMessage,
@@ -39,9 +39,9 @@ export default function ContactForm() {
   return (
     <div>
       <form action={formAction}>
-        <div className="py-24 text-gray-600">
-          <div className="md:w-1/2 bg-white rounded-lg p-8 flex flex-col mx-auto shadow-md">
-            <h2 className="text-lg mb-2">投稿を作成する</h2>
+        <div className="py-4 text-gray-600">
+          <div className="md:w-9/10 bg-white rounded-lg p-8 flex flex-col mx-auto shadow-md">
+            <h2 className="text-xs mb-2">ライフハックを共有する</h2>
             <div className="mb-4">
               {/* <label htmlFor="name" className="text-sm">
                 タイトル
@@ -84,7 +84,7 @@ export default function ContactForm() {
                 leading-8
                 h-36
                 "
-                placeholder="少しでもいいから教えて！"
+                placeholder="あなただけのライフハックを！"
               />
               {state.errors.content && (
                 <p className="text-red-500 text-sm mt-1">
@@ -97,9 +97,11 @@ export default function ContactForm() {
                 </p>
               )}
             </div>
-            <button className="text-white bg-gray-800 py-2 px-6 hover:bg-gray-600 rounded text-lg">
-              投稿
-            </button>
+            <div className="flex justify-end">
+              <button className="text-white bg-gray-800 py-2 px-8 hover:bg-gray-600 rounded-xl text-lg w-auto min-w-0">
+                投稿
+              </button>
+            </div>
           </div>
         </div>
       </form>

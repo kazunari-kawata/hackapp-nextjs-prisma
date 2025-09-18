@@ -5,8 +5,9 @@ import { prisma } from "@/lib/prisma";
  * 投稿に対して誰が「いいね」したかの全データを配列で返します。
  * 例：管理画面や集計などで利用できます。
  */
-export async function getPostLikes() {
+export async function getPostLikes(postId: number) {
   return await prisma.postLike.findMany({
+    where: { post_id: postId },
     select: {
       id: true, // いいねのID
       post_id: true, // どの投稿へのいいねか
